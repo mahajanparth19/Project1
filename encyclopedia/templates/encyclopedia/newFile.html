@@ -9,8 +9,9 @@
 
     <form action="{% url 'new' %}" method="POST">
         {% csrf_token %}
-        <input type="text" placeholder="Enter Title" name="Title"><br><br>
-        <textarea name="Content" style="height: 300px;">{{ content }}</textarea>
+        {{error}}<br>
+        <input type="text" placeholder="Enter Title" name="Title" required value="{{title}}"><br><br>
+        <textarea name="Content" placeholder="Enter Content" style="height: 300px;" required>{{ content }}</textarea><br><br>
         <button type="submit">Submit Article</button>
     </form>
 {% endblock %}

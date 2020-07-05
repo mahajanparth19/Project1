@@ -20,10 +20,10 @@ def ran(request):
 def search(request):
     data = request.POST
     name = data["q"]
-    titles = util.list_entries()
-    if name in titles:
+    if util.get_entry(name):
         return HttpResponseRedirect(reverse("page",args=[name]))
     else:
+        titles = util.list_entries()
         pages = []
         for title in titles:
             if name.lower() in title.lower():
@@ -50,16 +50,22 @@ def new(request):
     if request.method == 'POST':
         data = request.POST
         Title = data["Title"]
-        titles = util.list_entries()
-        if Title in titles:
-            error = "Page Already exists"
-            return HttpResponseRedirect(reverse("error",args=[error]))
-        
         content = data["Content"]
+        if util.get_entry(Title):
+            return render(request, "encyclopedia/newFile.html",{
+                "error" : "Page Already exists",
+                "title" : Title,
+                "content" : content
+            })
+        
         util.save_entry(Title, content)
         return HttpResponseRedirect(reverse("page",args=[Title]))
     
-    return render(request, "encyclopedia/newFile.html")
+    return render(request, "encyclopedia/newFile.html",{
+        "error" : "",
+        "title" : "",
+        "content" : ""
+    })
 
 def error(request,error):
     return render(request, "encyclopedia/error.html", {
