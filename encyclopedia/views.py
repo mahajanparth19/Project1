@@ -79,6 +79,8 @@ def page(request ,name):
         return HttpResponseRedirect(reverse("error",args=[error]))
         
     text = markdown2.markdown(page)
+    text = text.replace("/wiki","")
+        
     return render(request, "encyclopedia/pages.html",{
         "text" : text,
         "name" : name
